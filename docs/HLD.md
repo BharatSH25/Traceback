@@ -108,6 +108,7 @@ graph TD
   LLM --> R[RootCauseReport]
   API --> R
 ```
+Diagram is in HLD.png
 
 ## Deployment View
 
