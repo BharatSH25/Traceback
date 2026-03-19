@@ -1,5 +1,6 @@
 import logging
 import structlog
+#OpenTelemetry Also can be used
 
 
 def configure_logging(level: str) -> None:
