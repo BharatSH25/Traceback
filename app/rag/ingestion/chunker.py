@@ -1,3 +1,5 @@
+
+# Chunking strategy must be fixed currently its random
 class Chunker:
     def chunk(self, text: str, size: int = 600, overlap: int = 80) -> list[str]:
         chunks = []
