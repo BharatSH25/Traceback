@@ -5,7 +5,7 @@ from sqlalchemy import text
 from app.db.vector_client import get_vector_engine
 from app.rag.schema import ensure_rag_schema
 from app.rag.utils import to_pgvector
-
+#Changes 
 
 class VectorIndexer:
     async def upsert(
