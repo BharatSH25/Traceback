@@ -9,7 +9,7 @@ from pydantic import ValidationError
 from app.config.settings import get_settings
 from app.models.response_models import RootCauseReport
 
-
+#Currently not being used without API_KEY
 class LLMClient:
     def __init__(self) -> None:
         settings = get_settings()
