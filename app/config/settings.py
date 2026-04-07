@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pydantic_settings import BaseSettings
 
-
+#Configure Here
 class Settings(BaseSettings):
     app_env: str = "dev"
     app_host: str = "0.0.0.0"
