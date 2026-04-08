@@ -19,9 +19,14 @@ class LLMClient:
         self._client: AsyncOpenAI | None = None
         if self.provider == "openai":
             self._client = AsyncOpenAI(api_key=settings.openai_api_key)
+        elif self.provider == "groq":
+            self._client = AsyncOpenAI(
+                api_key=settings.groq_api_key,
+                base_url="https://api.groq.com/openai/v1",
+            )
 
     async def generate(self, prompt: str) -> RootCauseReport:
-        if self.dummy or self.provider != "openai" or self._client is None:
+        if self.dummy or self._client is None:
             return RootCauseReport(
                 primary_cause="Dummy response (LLM disabled)",
                 contributing_factors=[],
@@ -45,6 +50,16 @@ class LLMClient:
             "additionalProperties": False,
         }
 
+        response_format: dict[str, Any] = {
+            "type": "json_schema",
+            "json_schema": {
+                "name": "root_cause_report",
+                "schema": schema,
+                # Groq only supports strict schema enforcement on select models.
+                "strict": self.provider == "openai",
+            },
+        }
+
         response = await self._client.chat.completions.create(
             model=self.model,
             messages=[
@@ -54,14 +69,7 @@ class LLMClient:
                 },
                 {"role": "user", "content": prompt},
             ],
-            response_format={
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "root_cause_report",
-                    "schema": schema,
-                    "strict": True,
-                },
-            },
+            response_format=response_format,
         )
 
         content = response.choices[0].message.content or "{}"

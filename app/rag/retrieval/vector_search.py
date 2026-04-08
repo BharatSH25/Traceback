@@ -1,15 +1,24 @@
 from __future__ import annotations
 
+import logging
+
 from sqlalchemy import text
 
 from app.db.vector_client import get_vector_engine
-from app.rag.schema import ensure_rag_schema
+from app.rag.schema import RagUnavailableError, ensure_rag_schema
 from app.rag.utils import to_pgvector
+
+logger = logging.getLogger(__name__)
 
 
 class VectorSearch:
     async def search(self, embedding: list[float], k: int = 5) -> list[dict]:
-        await ensure_rag_schema()
+        try:
+            await ensure_rag_schema()
+        except RagUnavailableError:
+            logger.warning("RAG search skipped: pgvector not available.")
+            return []
+
         engine = get_vector_engine()
         vector_literal = to_pgvector(embedding)
         async with engine.begin() as conn:

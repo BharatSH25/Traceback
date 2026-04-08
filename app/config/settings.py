@@ -8,10 +8,11 @@ class Settings(BaseSettings):
     app_port: int = 8000
     log_level: str = "INFO"
 
-    database_url: str
+    database_url: str = "postgresql+asyncpg://postgres:Bharat%402016@localhost:5432/ai_incidents"
 
     llm_provider: str = "openai"
     openai_api_key: str | None = None
+    groq_api_key: str | None = None
     llm_model: str = "gpt-4o-mini"
     llm_dummy: bool = False
 
@@ -24,6 +25,5 @@ class Settings(BaseSettings):
 
 
 @lru_cache
-
 def get_settings() -> Settings:
     return Settings()

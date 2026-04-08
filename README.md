@@ -99,11 +99,13 @@ These are read from `.env` (see `.env.example`).
 - `LLM_PROVIDER`
 - `LLM_MODEL`
 - `OPENAI_API_KEY`
+- `GROQ_API_KEY`
 - `LLM_DUMMY`
 
 Notes:
 
 - Set `LLM_DUMMY=true` to avoid external LLM calls and return a placeholder report.
+- Set `LLM_PROVIDER=groq` and `GROQ_API_KEY=...` to use Groq via its OpenAI-compatible API.
 - `DATABASE_URL` must point to Postgres with `pgvector` available.
 
 ## Project Structure
