@@ -50,22 +50,24 @@ class LLMClient:
             "additionalProperties": False,
         }
 
-        response_format: dict[str, Any] = {
-            "type": "json_schema",
-            "json_schema": {
-                "name": "root_cause_report",
-                "schema": schema,
-                # Groq only supports strict schema enforcement on select models.
-                "strict": self.provider == "openai",
-            },
-        }
+        if self.provider == "groq":
+            response_format = {"type": "json_object"}
+        else:
+            response_format = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "root_cause_report",
+                    "schema": schema,
+                    "strict": True,
+                },
+            }
 
         response = await self._client.chat.completions.create(
             model=self.model,
             messages=[
                 {
                     "role": "system",
-                    "content": "Return JSON only that matches the provided schema.",
+                    "content": f"Return JSON only that matches this schema: {json.dumps(schema)}",
                 },
                 {"role": "user", "content": prompt},
             ],

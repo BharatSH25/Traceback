@@ -20,14 +20,13 @@ class VectorSearch:
             return []
 
         engine = get_vector_engine()
-        vector_literal = to_pgvector(embedding)
         async with engine.begin() as conn:
             result = await conn.execute(
                 text(
                     """
-                    SELECT content, metadata, (embedding <=> :embedding::vector) AS distance
+                    SELECT content, metadata, (embedding <=> CAST(:embedding AS vector)) AS distance
                     FROM rag_documents
-                    ORDER BY embedding <=> :embedding::vector
+                    ORDER BY embedding <=> CAST(:embedding AS vector)
                     LIMIT :k
                     """
                 ),

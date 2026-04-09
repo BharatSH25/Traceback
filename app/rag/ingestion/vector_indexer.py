@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from sqlalchemy import text
 
 from app.db.vector_client import get_vector_engine
@@ -25,7 +26,7 @@ class VectorIndexer:
                 text(
                     """
                     INSERT INTO rag_documents (doc_id, chunk_index, content, metadata, embedding)
-                    VALUES (:doc_id, :chunk_index, :content, :metadata, :embedding::vector)
+                    VALUES (:doc_id, :chunk_index, :content, :metadata, CAST(:embedding AS vector))
                     ON CONFLICT (doc_id, chunk_index)
                     DO UPDATE SET
                         content = EXCLUDED.content,
@@ -37,7 +38,7 @@ class VectorIndexer:
                     "doc_id": doc_id,
                     "chunk_index": chunk_index,
                     "content": content,
-                    "metadata": meta,
+                    "metadata": json.dumps(meta),
                     "embedding": vector_literal,
                 },
             )

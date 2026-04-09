@@ -38,19 +38,19 @@ async def ensure_rag_schema() -> None:
                 await conn.execute(text("CREATE EXTENSION IF NOT EXISTS pgcrypto"))
                 await conn.execute(
                     text(
-                        """
+                        f"""
                         CREATE TABLE IF NOT EXISTS rag_documents (
                             id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
                             doc_id text NOT NULL,
                             chunk_index int NOT NULL,
                             content text NOT NULL,
-                            metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
-                            embedding vector(:dim) NOT NULL,
+                            metadata jsonb NOT NULL DEFAULT '{{}}'::jsonb,
+                            embedding vector({EMBEDDING_DIM}) NOT NULL,
                             created_at timestamptz NOT NULL DEFAULT now(),
                             UNIQUE (doc_id, chunk_index)
                         )
                         """
-                    ).bindparams(dim=EMBEDDING_DIM)
+                    )
                 )
                 await conn.execute(
                     text(
