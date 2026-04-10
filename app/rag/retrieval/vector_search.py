@@ -30,7 +30,7 @@ class VectorSearch:
                     LIMIT :k
                     """
                 ),
-                {"embedding": vector_literal, "k": k},
+                {"embedding": to_pgvector(embedding), "k": k},
             )
             rows = result.fetchall()
         return [
