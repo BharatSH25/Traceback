@@ -4,7 +4,7 @@ import hashlib
 
 from app.rag.constants import EMBEDDING_DIM
 
-
+# Chaged embedd
 class EmbeddingGenerator:
     def embed(self, text: str) -> list[float]:
         # Deterministic local embedding to keep the pipeline functional without external calls.
