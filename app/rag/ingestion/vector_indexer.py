@@ -22,6 +22,7 @@ class VectorIndexer:
         meta = metadata or {}
         vector_literal = to_pgvector(embedding)
         async with engine.begin() as conn:
+            # ADDED chunk instertion query
             await conn.execute(
                 text(
                     """
