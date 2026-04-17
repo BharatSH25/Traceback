@@ -4,7 +4,7 @@ from app.api.investigation_api import router as investigation_router
 from app.telemetry.logging import configure_logging
 from app.config.settings import get_settings
 
-
+#
 def create_app() -> FastAPI:
     settings = get_settings()
     configure_logging(settings.log_level)
